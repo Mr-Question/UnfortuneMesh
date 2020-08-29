@@ -12,7 +12,7 @@
 #include <Mesh.h>
 #include <Frame.h>
 #include <Polygon.h>
-#include <Context.h>
+#include <LocalContext.h>
 
 #include <algorithm>
 #include <limits>
@@ -27,7 +27,7 @@ public:
   // =======================================================================
   Launcher(
     std::deque<Point>& thePoints,
-    Context&           theContext)
+    LocalContext&      theContext)
     : myContext (theContext)
   {
     if (thePoints.size() < 3)
@@ -85,5 +85,5 @@ private:
 
 private:
 
-  Context& myContext;
+  LocalContext& myContext;
 };

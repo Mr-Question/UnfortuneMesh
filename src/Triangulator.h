@@ -7,7 +7,7 @@
 #include <HalfEdge.h>
 #include <Mesh.h>
 #include <MeshTool.h>
-#include <Context.h>
+#include <LocalContext.h>
 
 #include <stdexcept>
 
@@ -19,7 +19,7 @@ public:
   // function : Constructor
   // purpose  :
   // =======================================================================
-  Triangulator(Context& theContext)
+  Triangulator(LocalContext& theContext)
     : myContext (theContext)
   {
   }
@@ -169,5 +169,5 @@ private:
 
 private:
 
-  Context& myContext;
+  LocalContext& myContext;
 };

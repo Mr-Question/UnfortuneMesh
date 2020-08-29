@@ -7,3 +7,4 @@ Generates triangulation on 2D point set enclosed by super-triangle structure usi
 # Run
 ./UnfortuneMesh ./data/regular.xy ./result.obj
 
+Until certain issues and actual checks, supposed to be cross-platform.

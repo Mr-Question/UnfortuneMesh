@@ -1,0 +1,3 @@
+[submodule "submodules/UnfortuneBase"]
+	path = submodules/UnfortuneBase
+	url = https://github.com/Mr-Question/UnfortuneBase.git

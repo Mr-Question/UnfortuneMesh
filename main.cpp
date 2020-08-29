@@ -5,7 +5,7 @@
 #include <Launcher.h>
 #include <Mesh.h>
 #include <Utils.h>
-#include <Context.h>
+#include <LocalContext.h>
 
 #include <iostream>
 
@@ -35,7 +35,7 @@ int main(int theArgc, char* theArgv[])
     return 1;
 
   Mesh aMesh;
-  Context aContext (aMesh);
+  LocalContext aContext (aMesh);
   std::deque<Point> aPoints;
 
   if (is_number (theArgv[1]))

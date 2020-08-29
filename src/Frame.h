@@ -5,6 +5,7 @@
 #pragma once
 
 #include <Point.h>
+#include <BndBox.h>
 
 #include <deque>
 
@@ -26,9 +27,9 @@ public:
   // purpose  :
   // =======================================================================
   static void Add(
-    const std::pair<Point, Point>& theBox,
-    std::deque<Point>&             thePoints,
-    const Type                     theFrameType)
+    const BndBox&      theBox,
+    std::deque<Point>& thePoints,
+    const Type         theFrameType)
   {
     switch (theFrameType)
     {
@@ -64,12 +65,12 @@ private:
   // purpose  :
   // =======================================================================
   static void addFrameTriangle(
-    const std::pair<Point, Point>& theBox,
-    std::deque<Point>&             thePoints)
+    const BndBox&      theBox,
+    std::deque<Point>& thePoints)
   {
     const double aDelta[2] = {
-      (theBox.second.Coord.X - theBox.first.Coord.X),
-      (theBox.second.Coord.Y - theBox.first.Coord.Y)
+      (theBox.Corners.Max.Coord.X - theBox.Corners.Min.Coord.X),
+      (theBox.Corners.Max.Coord.Y - theBox.Corners.Min.Coord.Y)
     };
 
     const double aDeltaMin = std::min (aDelta[0], aDelta[1]);
@@ -77,16 +78,16 @@ private:
     const double aDeltaSum = aDelta[0] + aDelta[1];
 
     thePoints.push_back (Point {
-      (theBox.second.Coord.X + theBox.first.Coord.X) / 2.,
-      (theBox.second.Coord.Y + aDeltaMax)});
+      (theBox.Corners.Max.Coord.X + theBox.Corners.Min.Coord.X) / 2.,
+      (theBox.Corners.Max.Coord.Y + aDeltaMax)});
 
     thePoints.push_back (Point {
-      (theBox.first.Coord.X - aDeltaSum),
-      (theBox.first.Coord.Y - aDeltaMin)});
+      (theBox.Corners.Min.Coord.X - aDeltaSum),
+      (theBox.Corners.Min.Coord.Y - aDeltaMin)});
 
     thePoints.push_back (Point {
-      (theBox.second.Coord.X + aDeltaSum),
-      (theBox.first .Coord.Y - aDeltaMin)});
+      (theBox.Corners.Max.Coord.X + aDeltaSum),
+      (theBox.Corners.Min.Coord.Y - aDeltaMin)});
   }
 
   // =======================================================================
@@ -94,29 +95,29 @@ private:
   // purpose  :
   // =======================================================================
   static void addFrameRectangle(
-    const std::pair<Point, Point>& theBox,
-    std::deque<Point>&             thePoints)
+    const BndBox&      theBox,
+    std::deque<Point>& thePoints)
   {
-    const double aDX = (theBox.second.Coord.X - theBox.first.Coord.X) / 2.;
-    const double aDY = (theBox.second.Coord.Y - theBox.first.Coord.Y) / 2.;
+    const double aDX = (theBox.Corners.Max.Coord.X - theBox.Corners.Min.Coord.X) / 2.;
+    const double aDY = (theBox.Corners.Max.Coord.Y - theBox.Corners.Min.Coord.Y) / 2.;
     thePoints.push_back (Point {
-      theBox.first .Coord.X - aDX,
-      theBox.first .Coord.Y - aDY
+      theBox.Corners.Min.Coord.X - aDX,
+      theBox.Corners.Min.Coord.Y - aDY
     });
 
     thePoints.push_back (Point {
-      theBox.second.Coord.X + aDX,
-      theBox.first .Coord.Y - aDY
+      theBox.Corners.Max.Coord.X + aDX,
+      theBox.Corners.Min.Coord.Y - aDY
     });
 
     thePoints.push_back (Point {
-      theBox.first .Coord.X - aDX,
-      theBox.second.Coord.Y + aDY
+      theBox.Corners.Min.Coord.X - aDX,
+      theBox.Corners.Max.Coord.Y + aDY
     });
 
     thePoints.push_back (Point {
-      theBox.second.Coord.X + aDX,
-      theBox.second.Coord.Y + aDY
+      theBox.Corners.Max.Coord.X + aDX,
+      theBox.Corners.Max.Coord.Y + aDY
     });
   }
 
@@ -125,23 +126,23 @@ private:
   // purpose  :
   // =======================================================================
   static void addFrameWidthCutTriangle(
-    const std::pair<Point, Point>& theBox,
-    std::deque<Point>&             thePoints)
+    const BndBox&      theBox,
+    std::deque<Point>& thePoints)
   {
-    const double aDY = (theBox.second.Coord.Y - theBox.first.Coord.Y) / 2.;
+    const double aDY = (theBox.Corners.Max.Coord.Y - theBox.Corners.Min.Coord.Y) / 2.;
     thePoints.push_back (Point {
-      theBox.first .Coord.X,
-      theBox.first .Coord.Y - aDY
+      theBox.Corners.Min.Coord.X,
+      theBox.Corners.Min.Coord.Y - aDY
     });
 
     thePoints.push_back (Point {
-      theBox.second.Coord.X,
-      theBox.first .Coord.Y - aDY
+      theBox.Corners.Max.Coord.X,
+      theBox.Corners.Min.Coord.Y - aDY
     });
 
     thePoints.push_back (Point {
-     (theBox.first .Coord.X + theBox.second.Coord.X) / 2.,
-      theBox.second.Coord.Y + aDY
+     (theBox.Corners.Min.Coord.X + theBox.Corners.Max.Coord.X) / 2.,
+      theBox.Corners.Max.Coord.Y + aDY
     });
   }
 
@@ -150,28 +151,28 @@ private:
   // purpose  :
   // =======================================================================
   static void addFrameWidthCutRectangle(
-    const std::pair<Point, Point>& theBox,
-    std::deque<Point>&             thePoints)
+    const BndBox&      theBox,
+    std::deque<Point>& thePoints)
   {
-    const double aDY = (theBox.second.Coord.Y - theBox.first.Coord.Y) / 2.;
+    const double aDY = (theBox.Corners.Max.Coord.Y - theBox.Corners.Min.Coord.Y) / 2.;
     thePoints.push_back (Point {
-      theBox.first .Coord.X,
-      theBox.first .Coord.Y - aDY
+      theBox.Corners.Min.Coord.X,
+      theBox.Corners.Min.Coord.Y - aDY
     });
 
     thePoints.push_back (Point {
-      theBox.second.Coord.X,
-      theBox.first .Coord.Y - aDY
+      theBox.Corners.Max.Coord.X,
+      theBox.Corners.Min.Coord.Y - aDY
     });
 
     thePoints.push_back (Point {
-      theBox.first .Coord.X,
-      theBox.second.Coord.Y + aDY
+      theBox.Corners.Min.Coord.X,
+      theBox.Corners.Max.Coord.Y + aDY
     });
 
     thePoints.push_back (Point {
-      theBox.second.Coord.X,
-      theBox.second.Coord.Y + aDY
+      theBox.Corners.Max.Coord.X,
+      theBox.Corners.Max.Coord.Y + aDY
     });
   }
 
@@ -180,19 +181,21 @@ private:
   // purpose  :
   // =======================================================================
   static void addFrameGrid(
-    const std::pair<Point, Point>& theBox,
-    std::deque<Point>&             thePoints)
+    const BndBox&      theBox,
+    std::deque<Point>& thePoints)
   {
     const int aAuxSize = 10;
 
     const double aDelta[2] = {
-      2. * (theBox.second.Coord.X - theBox.first.Coord.X) / (aAuxSize - 1),
-      2. * (theBox.second.Coord.Y - theBox.first.Coord.Y) / (aAuxSize - 1)
+      2. * (theBox.Corners.Max.Coord.X - theBox.Corners.Min.Coord.X) / (aAuxSize - 1),
+      2. * (theBox.Corners.Max.Coord.Y - theBox.Corners.Min.Coord.Y) / (aAuxSize - 1)
     };
 
     const Point aStartPoint {
-      (theBox.second.Coord.X + theBox.first.Coord.X) / 2. - (theBox.second.Coord.X - theBox.first.Coord.X),
-      (theBox.second.Coord.Y + theBox.first.Coord.Y) / 2. - (theBox.second.Coord.Y - theBox.first.Coord.Y)
+      (theBox.Corners.Max.Coord.X + theBox.Corners.Min.Coord.X) / 2. -
+        (theBox.Corners.Max.Coord.X - theBox.Corners.Min.Coord.X),
+      (theBox.Corners.Max.Coord.Y + theBox.Corners.Min.Coord.Y) / 2. -
+        (theBox.Corners.Max.Coord.Y - theBox.Corners.Min.Coord.Y)
     };
 
     for (int j = 0; j < aAuxSize; ++j)

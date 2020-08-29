@@ -21,7 +21,7 @@ public:
   TrianglesIterator (std::deque<HalfEdge>& theMesh)
     : myMesh (theMesh)
   {
-    for (int i = 0; i < myMesh.size () && myStack.empty (); ++i)
+    for (size_t i = 0; i < myMesh.size () && myStack.empty (); ++i)
     {
       if (!myMesh[i].IsFront)
         myStack.push (&myMesh[i]);

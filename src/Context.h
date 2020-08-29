@@ -5,7 +5,7 @@
 #pragma once
 
 #include <Mesh.h>
-
+#include <Frame.h>
 #include <cmath>
 
 struct Context
@@ -15,18 +15,24 @@ struct Context
   // purpose  :
   // =======================================================================
   Context(
-    Mesh&        theMesh,
-    const double theMinAngleThresholdDeg = 1.,
-    const double theMaxAngleThresholdDeg = 179.)
-    : Data (theMesh)
+    Mesh&             theMesh,
+    const double      theMinAngleThresholdDeg = 1.,
+    const double      theMaxAngleThresholdDeg = 179.,
+    const double      theScale                = 1.,
+    const Frame::Type theFrameType            = Frame::Triangle)
+    : Data      (theMesh)
+    , Front     (nullptr)
+    , FrameType (theFrameType)
+    , Scale     (theScale)
     , SinMinAngleThreshold (sin (theMinAngleThresholdDeg * M_PI / 180.))
     , CosMaxAngleThreshold (cos (theMaxAngleThresholdDeg * M_PI / 180.))
-    , Front (nullptr)
   {
   }
 
-  Mesh&                Data;
-  double               SinMinAngleThreshold;
-  double               CosMaxAngleThreshold;
-  HalfEdge*            Front;
+  Mesh&       Data;
+  HalfEdge*   Front;
+  Frame::Type FrameType;
+  double      Scale;
+  double      SinMinAngleThreshold;
+  double      CosMaxAngleThreshold;
 };

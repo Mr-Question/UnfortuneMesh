@@ -35,7 +35,7 @@ public:
       return;
     }
 
-    BndBox aBox = PointSetTool::Box (thePoints);
+    const BndBox aBox = PointSetTool::Box (thePoints);
     Frame::Add    (aBox, thePoints, myContext.FrameType);
     PointSetTool::Scale (thePoints, myContext.Scale, aBox);
 
